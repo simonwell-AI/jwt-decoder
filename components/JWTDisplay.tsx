@@ -27,38 +27,44 @@ export default function JWTDisplay({
       const background = backgroundRef.current;
 
       const handleScroll = () => {
-        background.scrollTop = textarea.scrollTop;
-        background.scrollLeft = textarea.scrollLeft;
+        if (background && textarea) {
+          background.scrollTop = textarea.scrollTop;
+          background.scrollLeft = textarea.scrollLeft;
+        }
       };
 
       textarea.addEventListener('scroll', handleScroll);
       return () => textarea.removeEventListener('scroll', handleScroll);
     }
-  }, [editable]);
+  }, [editable, jwt]);
 
   // 分割 JWT 為三個部分
   const parts = jwt.split('.');
   const hasValidFormat = parts.length === 3;
 
-  const containerClass = `w-full min-h-[192px] bg-gray-900/50 border border-gray-700/50 rounded-lg text-sm font-mono resize-none focus-within:outline-none focus-within:ring-2 focus-within:ring-purple-500/50 focus-within:border-purple-500/50 backdrop-blur-sm ${className}`;
+  const containerClass = `w-full bg-gray-900/50 border border-gray-700/50 rounded-lg text-sm font-mono resize-none focus-within:outline-none focus-within:ring-2 focus-within:ring-purple-500/50 focus-within:border-purple-500/50 backdrop-blur-sm ${className}`;
 
   if (!jwt.trim() && placeholder) {
     if (editable) {
       return (
-        <div className={containerClass}>
+        <div className={containerClass} style={{ minHeight: '192px' }}>
           <textarea
             ref={textareaRef}
             value={jwt}
             onChange={(e) => onChange?.(e.target.value)}
             placeholder={placeholder}
             className="w-full h-full bg-transparent border-0 text-gray-500 font-mono resize-none focus:outline-none p-4 overflow-auto"
-            style={{ caretColor: 'rgb(196, 181, 253)' }}
+            style={{ 
+              caretColor: 'rgb(196, 181, 253)',
+              minHeight: '192px',
+              height: '192px'
+            }}
           />
         </div>
       );
     }
     return (
-      <div className={`${containerClass} p-4 overflow-auto`}>
+      <div className={`${containerClass} p-4 overflow-auto`} style={{ minHeight: '192px' }}>
         <span className="text-gray-500">{placeholder}</span>
       </div>
     );
@@ -67,10 +73,11 @@ export default function JWTDisplay({
   if (!hasValidFormat && jwt.trim()) {
     if (editable) {
       return (
-        <div className={`${containerClass} relative overflow-hidden`}>
+        <div className={`${containerClass} relative`} style={{ minHeight: '192px', height: '192px' }}>
           <div
             ref={backgroundRef}
             className="absolute inset-0 p-4 pointer-events-none overflow-auto hide-scrollbar"
+            style={{ height: '100%' }}
           >
             <span className="text-purple-300 break-all whitespace-pre-wrap">{jwt}</span>
           </div>
@@ -79,13 +86,16 @@ export default function JWTDisplay({
             value={jwt}
             onChange={(e) => onChange?.(e.target.value)}
             className="w-full h-full bg-transparent border-0 text-transparent font-mono resize-none focus:outline-none relative z-10 p-4 overflow-auto"
-            style={{ caretColor: 'rgb(196, 181, 253)' }}
+            style={{ 
+              caretColor: 'rgb(196, 181, 253)',
+              height: '100%'
+            }}
           />
         </div>
       );
     }
     return (
-      <div className={`${containerClass} p-4 overflow-auto`}>
+      <div className={`${containerClass} p-4 overflow-auto`} style={{ minHeight: '192px' }}>
         <span className="text-purple-300 break-all">{jwt}</span>
       </div>
     );
@@ -95,11 +105,12 @@ export default function JWTDisplay({
 
   if (editable) {
     return (
-      <div className={`${containerClass} relative overflow-hidden`}>
+      <div className={`${containerClass} relative`} style={{ minHeight: '192px', height: '192px' }}>
         {/* 背景顯示帶顏色的 JWT - 同步滾動，隱藏滾動條 */}
         <div
           ref={backgroundRef}
           className="absolute inset-0 p-4 pointer-events-none overflow-auto hide-scrollbar"
+          style={{ height: '100%' }}
         >
           <span className="text-pink-400 break-all whitespace-pre-wrap">{header}</span>
           <span className="text-gray-400">.</span>
@@ -113,14 +124,17 @@ export default function JWTDisplay({
           value={jwt}
           onChange={(e) => onChange?.(e.target.value)}
           className="w-full h-full bg-transparent border-0 text-transparent font-mono resize-none focus:outline-none relative z-10 p-4 overflow-auto"
-          style={{ caretColor: 'rgb(196, 181, 253)' }}
+          style={{ 
+            caretColor: 'rgb(196, 181, 253)',
+            height: '100%'
+          }}
         />
       </div>
     );
   }
 
   return (
-    <div className={`${containerClass} p-4 overflow-auto`}>
+    <div className={`${containerClass} p-4 overflow-auto`} style={{ minHeight: '192px' }}>
       <span className="text-pink-400 break-all">{header}</span>
       <span className="text-gray-400">.</span>
       <span className="text-purple-400 break-all">{payload}</span>

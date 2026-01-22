@@ -117,7 +117,7 @@ export default function JWTDecoder({ initialJWT = '', onJWTChange }: JWTDecoderP
           <JWTDisplay
             jwt={jwt}
             placeholder="在此貼上你的 JWT"
-            className="h-48"
+            className=""
             editable
             onChange={handleJWTChange}
           />
